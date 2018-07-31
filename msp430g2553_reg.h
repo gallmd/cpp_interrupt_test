@@ -32,6 +32,7 @@ namespace my_msp430
         constexpr uint8_t CALBC1_16MHZ = 0x8F;
         constexpr uint8_t CALDCO_16MHZ = 0xAA;
 
+        //ports
         constexpr uint16_t P1IN = 0x0020U;
         constexpr uint16_t P1OUT = 0x0021U;
         constexpr uint16_t P1DIR = 0x0022U;
@@ -60,11 +61,33 @@ namespace my_msp430
         constexpr uint16_t DCOCTL = 0x0056;
         constexpr uint16_t BCSCTL1 = 0x0057;
 
+        //Communication
+        constexpr uint16_t UCB0CTL1 = 0x0069U;
+        constexpr uint16_t UCB0CTL0 = 0x0068U;
+        constexpr uint16_t UCB0BR0 = 0x006AU;
+        constexpr uint16_t UCB0BR1 = 0x006BU;
+        constexpr uint16_t UCB0I2CSA = 0x011AU;
+        //constexpr uint8_t UCB0TXIE = 0x08U;
+        //constexpr uint8_t UCSWRST = 0x01U;
+        //constexpr uint8_t UCSSEL_2 = 0x80U;
+        //constexpr uint8_t UCMST = 0x08U;
+        //constexpr uint8_t UCMODE_3 = 0x06U;
+        //constexpr uint8_t UCSYNC = 0x01U;
+
+        //interrupts
+        constexpr uint16_t IE1 = 0x0000U;
+        constexpr uint16_t IFG1 = 0x0002U;
+        constexpr uint16_t IE2 = 0x0001U;
+        constexpr uint16_t IFG2 = 0x0003U;
+
+
 
         }
 
 
     }
+
+
 
 
 

@@ -22,7 +22,7 @@ __attribute__((interrupt(PORT1_VECTOR))) void port1_isr(void){
     {
 //    reg_access<uint16_t, uint8_t, my_msp430::reg::P1OUT, my_msp430::reg::bval0>::reg_xor();
         Button::handlers[1]->handler();
-        __delay_cycles(20000);
+        __delay_cycles(100000);
     }
 
     P1IFG = 0;
@@ -56,7 +56,7 @@ int main()
 
             red.toggle();
             green.toggle();
-            __delay_cycles(1000000);
+//            __delay_cycles(1000000);
             my_btn.button_reset();
 
         }
