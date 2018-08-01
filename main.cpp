@@ -11,6 +11,8 @@
 #include "msp430g2553_reg.h"
 #include "led.h"
 #include "button.h"
+#include "i2c.h"
+#include <array>
 
 Button* Button::handlers[2] = {0};
 Button my_btn(1);
@@ -44,7 +46,22 @@ int main()
 
     //Setup Leds
     const Led<uint16_t, uint8_t, my_msp430::reg::P1OUT, my_msp430::reg::bval0>red;
-    const Led<uint16_t, uint8_t, my_msp430::reg::P1OUT, my_msp430::reg::bval6>green;
+    //const Led<uint16_t, uint8_t, my_msp430::reg::P1OUT, my_msp430::reg::bval6>green;
+
+    i2c i2c_comm;
+    const std::array<uint8_t, 17> osc_on = {0x21, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    i2c_comm.send_data(0x070, osc_on);
+
+    const std::array<uint8_t, 17> no_blink = {0x81, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    i2c_comm.send_data(0x70, no_blink);
+
+    const std::array<uint8_t, 17> brightness = {0xEF, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    i2c_comm.send_data(0x70, brightness);
+
+
+    const std::array<uint8_t, 17> all_on = {0x00, 0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00};
+    i2c_comm.send_data(0x70, all_on);
+
 
 
     __enable_interrupt();
@@ -55,7 +72,7 @@ int main()
         if(my_btn.is_button_pressed()){
 
             red.toggle();
-            green.toggle();
+            //green.toggle();
 //            __delay_cycles(1000000);
             my_btn.button_reset();
 

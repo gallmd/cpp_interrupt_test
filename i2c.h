@@ -11,6 +11,7 @@
 #include "msp430g2553_reg.h"
 #include "msp430.h"
 #include "reg_access.h"
+#include "reg_access_dynamic.h"
 #include "util_circular_buffer.h"
 #include <cstdint>
 #include <array>
@@ -23,10 +24,11 @@ public:
 
 
     i2c();
-    void send_data(uint8_t address, send_buffer send_buf);
+    int8_t send_data(uint8_t address, send_buffer send_buf);
 
 private:
 
+    int8_t check_ack();
 
 
 

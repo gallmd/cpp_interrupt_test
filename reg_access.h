@@ -50,6 +50,13 @@ public:
         *reinterpret_cast<volatile reg_type*>(address) &= value;
 
     }
+
+    static reg_type reg_get()
+    {
+
+        return *reinterpret_cast<volatile reg_type*>(address);
+
+    }
 };
 
 

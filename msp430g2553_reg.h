@@ -67,6 +67,8 @@ namespace my_msp430
         constexpr uint16_t UCB0BR0 = 0x006AU;
         constexpr uint16_t UCB0BR1 = 0x006BU;
         constexpr uint16_t UCB0I2CSA = 0x011AU;
+        constexpr uint16_t UCB0STAT = 0x006DU;
+        constexpr uint16_t UCB0TXBUF = 0x006FU;
         //constexpr uint8_t UCB0TXIE = 0x08U;
         //constexpr uint8_t UCSWRST = 0x01U;
         //constexpr uint8_t UCSSEL_2 = 0x80U;
