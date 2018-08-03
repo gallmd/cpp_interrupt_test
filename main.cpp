@@ -35,11 +35,24 @@ int main()
 {
 
     WDTCTL = WDTPW + WDTHOLD;
+//    DCOCTL = 0;
+//    BCSCTL1 = CALBC1_1MHZ;
+//    DCOCTL = CALDCO_1MHZ;
 
-    //set clock to 16MHZ
+//    //set clock to 16MHZ
     reg_access<uint16_t, uint8_t, my_msp430::reg::DCOCTL, 0>::reg_set();
-    reg_access<uint16_t, uint8_t, my_msp430::reg::BCSCTL1, my_msp430::reg::CALBC1_16MHZ>::reg_set();
-    reg_access<uint16_t, uint8_t, my_msp430::reg::DCOCTL, my_msp430::reg::CALDCO_16MHZ>::reg_set();
+    reg_access<uint16_t, uint16_t, my_msp430::reg::BCSCTL1, my_msp430::reg::CALBC1_1MHZ>::reg_set();
+    reg_access<uint16_t, uint16_t, my_msp430::reg::DCOCTL, my_msp430::reg::CALDCO_1MHZ>::reg_set();
+
+//    //route clock to P1.1
+//    TA0CTL = TASSEL_2 | ID_0 | MC_1;
+//    TA0CCTL0 = OUTMOD_4;
+//     TA0CCTL1 = OUTMOD_4;
+//     TA0CCR0 = 1;
+//     //TA0CCR1 = 211;
+//    reg_access<uint16_t, uint8_t, my_msp430::reg::P1SEL, my_msp430::reg::bval1>::reg_or();
+//    reg_access<uint16_t, uint8_t, my_msp430::reg::P1DIR, my_msp430::reg::bval1>::reg_or();
+
 
     /* Configure ACLK to be sourced from VLO = ~12KHz */
     BCSCTL3 |= LFXT1S_2;
@@ -61,6 +74,10 @@ int main()
 
     const std::array<uint8_t, 17> all_on = {0x00, 0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00};
     i2c_comm.send_data(0x70, all_on);
+
+    const std::array<uint8_t, 17> all_off = {0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    i2c_comm.send_data(0x70, all_off);
+
 
 
 

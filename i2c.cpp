@@ -40,14 +40,15 @@ int8_t i2c::send_data(uint8_t address, send_buffer send_buf)
     reg_access<uint16_t, uint8_t, my_msp430::reg::UCB0CTL1, (UCTR | UCTXSTT)>::reg_or();
 
     //Wait for the start condition to be sent and ready to transmit interrupt
-    while((reg_access<uint16_t, uint8_t,my_msp430::reg::UCB0CTL1,my_msp430::reg::bval0>::reg_get() & UCTXSTT) && ((reg_access<uint16_t, uint8_t, my_msp430::reg::IFG2,my_msp430::reg::bval0>::reg_get() &  UCB0TXIFG) ==0));
+    while((dynamic_access<uint16_t, uint8_t>::reg_get(my_msp430::reg::UCB0CTL1) & UCTXSTT) && ((dynamic_access<uint16_t, uint8_t>::reg_get(my_msp430::reg::IFG2) &  UCB0TXIFG) ==0));
 
     err = i2c::check_ack();
+    if(err >= 0){
 
     for(auto it = send_buf.begin(); it != send_buf.end(); ++it){
 
         dynamic_access<uint16_t, uint8_t>::reg_set(my_msp430::reg::UCB0TXBUF, *it);
-        while((reg_access<uint16_t, uint8_t, my_msp430::reg::IFG2, my_msp430::reg::bval0>::reg_get() & UCA0TXIFG)==0){
+        while((reg_access<uint16_t, uint8_t, my_msp430::reg::IFG2, my_msp430::reg::bval0>::reg_get() & UCB0TXIFG)==0){
 
             err = i2c::check_ack();
             if(err < 0){
@@ -55,6 +56,7 @@ int8_t i2c::send_data(uint8_t address, send_buffer send_buf)
             }
         }
 
+    }
     }
 
 
@@ -67,12 +69,13 @@ int8_t i2c::send_data(uint8_t address, send_buffer send_buf)
 
 int8_t i2c::check_ack(){
 
-    if(reg_access<uint16_t, uint8_t, my_msp430::reg::UCB0STAT, my_msp430::reg::bval0>::reg_get() & UCNACKIFG){
+    if(dynamic_access<uint16_t, uint8_t>::reg_get(my_msp430::reg::UCB0STAT) & UCNACKIFG){
             //Stop I2C Transmission
-            reg_access<uint16_t, uint8_t, my_msp430::reg::UCB0CTL1, UCTXSTP>::reg_or();
+            dynamic_access<uint16_t, uint8_t>::reg_or(my_msp430::reg::UCB0CTL1, UCTXSTP);
 
-            //clear interrupt flag
-            reg_access<uint16_t, uint8_t, my_msp430::reg::UCB0STAT, UCNACKIFG>::reg_and_not();
+            //clear interrupt flag) &  UCB0TXIFG) ==0));
+
+            dynamic_access<uint16_t, uint8_t>::reg_not(my_msp430::reg::UCB0STAT, UCNACKIFG);
 
             return -1;
     }

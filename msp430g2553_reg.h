@@ -60,6 +60,8 @@ namespace my_msp430
         //clock
         constexpr uint16_t DCOCTL = 0x0056;
         constexpr uint16_t BCSCTL1 = 0x0057;
+        constexpr uint16_t CALDCO_1MHZ = 0x00D7;
+        constexpr uint16_t CALBC1_1MHZ = 0x0086;
 
         //Communication
         constexpr uint16_t UCB0CTL1 = 0x0069U;
