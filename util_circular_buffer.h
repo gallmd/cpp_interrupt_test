@@ -57,6 +57,13 @@ public:
 
     }
 
+    bool empty(void)
+    {
+
+        return head == tail;
+
+    }
+
     void reset(void)
     {
 

@@ -28,7 +28,6 @@ int main()
 {
 
     WDTCTL = WDTPW + WDTHOLD;
-    my_uart.data_available();
 
 
     //set clock to 16MHZ
@@ -58,9 +57,9 @@ int main()
 //
 //    const std::array<uint8_t, 17> all_on = {0x00, 0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00};
 //    i2c_comm.send_data(0x70, all_on);
-
+//
 //    const std::array<uint8_t, 17> all_off = {0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-    //i2c_comm.send_data(0x70, all_off);
+//    i2c_comm.send_data(0x70, all_off);
 
 
 
@@ -73,6 +72,7 @@ int main()
 
         if(my_uart.data_available()){
             red.toggle();
+            my_uart.send_data(my_uart.get_data());
         }
 
         if(my_btn.is_button_pressed()){

@@ -19,6 +19,7 @@ uart::uart(uint8_t id)
             & UCSWRST){
 
         reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0CTL1, UCSSEL_2>::reg_or();
+        //104 for 16MHZ, 6 for 1MHZ
         reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0BR0, 104>::reg_set();
         reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0BR1, 0>::reg_set();
         reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0MCTL, 0x2>::reg_set();
@@ -58,9 +59,15 @@ void uart::send_data(uint8_t data)
 
 bool uart::data_available()
 {
-    return bool_data_available;
+    return !uart::rx_buffer.empty();
 }
 
+uint8_t uart::get_data()
+{
+
+    return uart::rx_buffer.get();
+
+}
 
 
 #pragma INTERRUPT

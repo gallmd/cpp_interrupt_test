@@ -26,7 +26,7 @@
         void send_data(uint8_t data);
         void handler();
         bool data_available();
-        data_packet get_data();
+        uint8_t get_data();
         uint16_t get_buffer_address();
 
         static uart* handlers[2];
