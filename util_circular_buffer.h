@@ -67,7 +67,7 @@ public:
 
 
 private:
-    std::array<buffer_type, 4U> buf;
+    std::array<buffer_type, 0xC5U> buf;
 
     std::uint8_t head;
     std::uint8_t tail;

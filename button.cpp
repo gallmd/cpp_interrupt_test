@@ -47,5 +47,17 @@ void Button::handler(){
     button_pressed = true;
 }
 
+#pragma INTERRUPT
+__attribute__((interrupt(PORT1_VECTOR))) void port1_isr(void){
 
+    if(P1IFG & my_msp430::reg::bval3)
+    {
+//    reg_access<uint16_t, uint8_t, my_msp430::reg::P1OUT, my_msp430::reg::bval0>::reg_xor();
+        Button::handlers[1]->handler();
+        __delay_cycles(100000);
+    }
+
+    P1IFG = 0;
+
+}
 
