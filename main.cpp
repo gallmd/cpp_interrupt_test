@@ -22,6 +22,10 @@ Button my_btn(1);
 uart* uart::handlers[2] = {0};
 uart my_uart(1);
 
+i2c* i2c::handlers[2] = {0};
+i2c i2c_comm(1);
+
+
 
 
 int main()
@@ -32,8 +36,8 @@ int main()
 
     //set clock to 16MHZ
     reg_access<uint16_t, uint8_t, my_msp430::reg::DCOCTL, 0>::reg_set();
-    reg_access<uint16_t, uint16_t, my_msp430::reg::BCSCTL1, my_msp430::reg::CALBC1_16MHZ>::reg_set();
-    reg_access<uint16_t, uint16_t, my_msp430::reg::DCOCTL, my_msp430::reg::CALDCO_16MHZ>::reg_set();
+    reg_access<uint16_t, uint16_t, my_msp430::reg::BCSCTL1, my_msp430::reg::CALBC1_1MHZ>::reg_set();
+    reg_access<uint16_t, uint16_t, my_msp430::reg::DCOCTL, my_msp430::reg::CALDCO_1MHZ>::reg_set();
 
 
 
@@ -42,33 +46,28 @@ int main()
 
     //Setup Leds
     const Led<uint16_t, uint8_t, my_msp430::reg::P1OUT, my_msp430::reg::bval0>red;
-    const Led<uint16_t, uint8_t, my_msp430::reg::P1OUT, my_msp430::reg::bval6>green;
-
-//    i2c i2c_comm;
-//    const std::array<uint8_t, 17> osc_on = {0x21, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-//    i2c_comm.send_data(0x070, osc_on);
-//
-//    const std::array<uint8_t, 17> no_blink = {0x81, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-//    i2c_comm.send_data(0x70, no_blink);
-//
-//    const std::array<uint8_t, 17> brightness = {0xEF, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-//    i2c_comm.send_data(0x70, brightness);
-//
-//
-//    const std::array<uint8_t, 17> all_on = {0x00, 0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00};
-//    i2c_comm.send_data(0x70, all_on);
-//
-//    const std::array<uint8_t, 17> all_off = {0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-//    i2c_comm.send_data(0x70, all_off);
-
-
-
+//    const Led<uint16_t, uint8_t, my_msp430::reg::P1OUT, my_msp430::reg::bval6>green;
 
     __enable_interrupt();
 
+    const std::array<uint8_t, 17> osc_on = {0x21, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    i2c_comm.send_data(0x070, osc_on);
+
+    const std::array<uint8_t, 17> no_blink = {0x81, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    i2c_comm.send_data(0x70, no_blink);
+
+    const std::array<uint8_t, 17> brightness = {0xEF, 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    i2c_comm.send_data(0x70, brightness);
+
+
+    const std::array<uint8_t, 17> all_on = {0x00, 0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00};
+    i2c_comm.send_data(0x70, all_on);
+
+    const std::array<uint8_t, 17> all_off = {0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    i2c_comm.send_data(0x70, all_off);
+
 
     while(1){
-
 
         if(my_uart.data_available()){
             red.toggle();
@@ -78,11 +77,17 @@ int main()
         if(my_btn.is_button_pressed()){
 
             red.toggle();
-            green.toggle();
+//            green.toggle();
             __delay_cycles(1000000);
             my_btn.button_reset();
 
         }
+
+        i2c_comm.send_data(0x70, all_off);
+        __delay_cycles(100000);
+        i2c_comm.send_data(0x70, all_on);
+        __delay_cycles(100000);
+
 
 
     }

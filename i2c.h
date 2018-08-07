@@ -20,15 +20,20 @@ class i2c
 {
 
 public:
-    typedef std::array<uint8_t, 17>send_buffer;
+    typedef std::array<uint8_t, 17>send_buffer_type;
 
 
-    i2c();
-    int8_t send_data(uint8_t address, send_buffer send_buf);
+    i2c(uint8_t id);
+    int8_t send_data(uint8_t address, send_buffer_type send_buf);
+    void handler();
+
+    static i2c* handlers[2];
 
 private:
 
     int8_t check_ack();
+    util::circular_buffer<uint8_t> send_buffer;
+    int8_t send_data_size;
 
 
 

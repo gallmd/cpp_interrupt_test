@@ -23,7 +23,8 @@ uart::uart(uint8_t id)
         reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0BR0, 104>::reg_set();
         reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0BR1, 0>::reg_set();
         reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0MCTL, 0x2>::reg_set();
-        reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0MCTL, UCOS16>::reg_or();
+        //comment out for 1MHZ
+//        reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0MCTL, UCOS16>::reg_or();
 
 
         reg_access<uint16_t, uint8_t, my_msp430::reg::UCA0CTL1, UCSWRST>::reg_and_not();
